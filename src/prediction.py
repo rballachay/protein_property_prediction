@@ -1,6 +1,6 @@
 import os
 import pandas as pd
-from src.preprocess import AMINO_ACIDS
+from src.transform.preprocess import AMINO_ACIDS
 from rdkit import Chem
 
 

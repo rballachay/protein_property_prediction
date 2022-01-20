@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 from data.AADesc import BLOSUM62, VHSE, Z3, Z5
 
-from .fixtures import AMINO_ACIDS, PATTERNS
+from src.data.fixtures import AMINO_ACIDS, PATTERNS
 
 
 def get_motif_titles():

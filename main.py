@@ -6,8 +6,8 @@ Created on Fri Oct 15 19:48:11 2021
 @author: RileyBallachays
 """
 
-from src.data import DataCreation
-from src.hypermodel import HyperModel
+from src.data.data_creation import DataCreation
+from src.model.hypermodel import HyperModel
 
 
 def main():

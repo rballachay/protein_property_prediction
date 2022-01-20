@@ -9,7 +9,7 @@ import numpy as np
 import pandas as pd
 from data.AADesc import BLOSUM62, VHSE, Z3, Z5
 
-from .fixtures import SMI
+from src.data.fixtures import SMI
 
 """
 All functions in section taken AND ADADPTED from :
@@ -26,11 +26,10 @@ def generate_encoded_smiles(
     be propagated as labels for prediction.
     """
     if haslabels:
-        check = check_for_encoded_smiles(name)
+        check = _check_for_encoded_smiles(name)
     else:
         name += "_prediction"
-        print(name)
-        check = check_for_encoded_smiles(name)
+        check = _check_for_encoded_smiles(name)
     if check[0]:
         arr = check[1]
     else:
@@ -39,7 +38,6 @@ def generate_encoded_smiles(
             pass
         elif "SMILES" in df.columns:
             df["SMILES"] = canonicalize(df["SMILES"].values)
-            print(df["SMILES"])
             df.to_csv(
                 os.path.join(output, "data/%s_canonical.tsv" % name),
                 index=False,
@@ -143,10 +141,9 @@ def parse_formulas(formulas, processes=mp.cpu_count()):
         return pd.DataFrame(data=p.map(_parse_formula, formulas))
 
 
-def check_for_encoded_smiles(filename):
+def _check_for_encoded_smiles(filename):
     filename += ".npy"
-    parent_dir = dirname(dirname(abspath(__file__)))
-    file_path = parent_dir + "/data/" + filename
+    file_path = f"data{os.sep}{filename}"
     file_path = file_path
     if os.path.isfile(file_path):
         embedding = np.load(file_path)

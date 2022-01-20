@@ -6,7 +6,7 @@ Created on Sat Oct 23 11:03:02 2021
 @author: RileyBallachay
 """
 import json
-from src.data import DataCreation
+from src.data_creation import DataCreation
 from src.hypermodel import HyperModel
 from src.prediction import make_prediction_data
 

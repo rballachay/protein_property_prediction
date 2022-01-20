@@ -14,7 +14,7 @@ from keras.layers import Dense, Dropout, Input, concatenate
 from keras.models import Model
 from tensorflow.python.framework.ops import disable_eager_execution
 
-from src.config import MODEL_CONFIG
+from src.data.config import MODEL_CONFIG
 from src.plotting import plot_predictions
 
 from .vae import VAE

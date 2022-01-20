@@ -12,9 +12,11 @@ We want to predict the structure activity relationship of tetramer polypeptides 
 
 ### PYHSIOCHEMICAL PROPERTY DATASET
 A dictionary for mapping tetrameter patterns to the following descriptors of tetramer properties:
+
 * VHSE (principal components score Vectors of Hydrophobic, Steric, and Electronic properties) 
 * BLOSUM62 (analyze the frequencies of amino acid substitutions in clusters of related proteins. Within each cluster, or block, the amino acid sequences were at least 62% identical when two proteins were aligned) 
 * Z3 and Z5 scores (physicochemical properties of the AAs including NMR data and thin-layer chromatograph) 
+
 For more information about these features, see [here](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-020-03546-x)
 
 ### SMILES
@@ -29,3 +31,19 @@ The model used to solve this problem is a hybrid neural network with mixed input
 
 ![alt text](docs/model.png)
 
+## RUN
+
+In order to run the code, you need to have the dataset, which is not provided in the repository. 
+
+## REQUIREMENTS
+
+```bash
+tensorflow==2.4.1
+Keras==2.4.3
+numpy==1.19.5
+pandas==1.0.5
+keras_tuner==1.0.4
+openbabel==3.1.1.1
+scikit_learn==1.0
+seaborn==0.11.2
+```

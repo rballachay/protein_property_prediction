@@ -60,6 +60,7 @@ class VAE(object):
         x = Input(shape=(self.max_length,))
         self.x_vae = x
 
+        # construct embedding
         x_embed = Embedding(
             self.nchars, self.embedding_dim, input_length=self.max_length
         )(x)
@@ -165,6 +166,9 @@ class VAE(object):
         self.autoencoder.compile(
             optimizer=opt,
             loss=[vae_loss, "mean_squared_error"],
+
+            # split loss between accuracy of prediction and accuracy
+            # of latent representation
             metrics=["accuracy", objectives.categorical_crossentropy],
             loss_weights=[0.1, 0.9],
         )
@@ -199,11 +203,10 @@ class VAE(object):
             lr = lr0 * (
                 1.0 / (1.0 + opt.decay * K.cast(opt.iterations, K.dtype(opt.decay)))
             )
-
         return lr, lr0
 
     def _build_encoder(self, x):
-        # build filters
+        # build filters for convoluting embedded representation
         for i, (f, k) in enumerate(zip(self.filters, self.kernels)):
             if i < 1:
                 h = Conv1D(f, k, activation="relu", padding="same")(x)
@@ -216,27 +219,33 @@ class VAE(object):
         def sampling(args):
             z_mean_, z_log_var_ = args
             batch_size = K.shape(z_mean_)[0]
+
+            # construct random distribution as tensor 
             epsilon = K.random_normal(
                 shape=(batch_size, self.latent_dim), mean=0.0, stddev=self.epsilon_std
             )
+
+            # return variational tensors
             return z_mean_ + K.exp(z_log_var_) * epsilon
 
-        # latent dim
+        # latent dim: two parts, mean (latent representation) and log_variance
         z_mean = Dense(self.latent_dim, activation="tanh")(h)
         z_log_var = Dense(self.latent_dim, activation="linear")(h)
 
         # custom loss term
         def vae_loss(y_true, y_pred):
+            # compute mean of all items in batch
             xent_loss = K.mean(
                 objectives.categorical_crossentropy(y_true, y_pred), axis=-1
             )
+            # compute mean kl-divergence loss of batch
             kl_loss = K.mean(
                 -z_log_var + 0.5 * K.square(z_mean) + K.exp(z_log_var) - 1, axis=-1
             )
 
             return xent_loss + kl_loss  # + mu_loss + var_loss
 
-        # add noise
+        # create variational autoencoder - will update in backprop
         z_mean_variational = Lambda(sampling, output_shape=(self.latent_dim,))(
             [z_mean, z_log_var]
         )
@@ -260,4 +269,4 @@ class VAE(object):
         return decoded
 
     def _build_predictor(self, encoded):
-        return Dense(50, activation="linear")(encoded)
+        return Dense(1, activation="linear")(encoded)

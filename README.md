@@ -27,5 +27,5 @@ SMILES (simplified molecular-input line-entry system) "is a specification in the
 
 The model used to solve this problem is a hybrid neural network with mixed inputs (from three separate sub-networks) which are fused in a final meta-network. The first sub-network (indicated at the top) is a variation of the Darkchem network, which accepts an integer-encoded SMILES string, uses a matrix embedding to create a feature vector which is passed to a convolutional neural network (of three filters and three kernels) to reconstruct 2-D protein information, which is flattened prior to input to the second network. The second sub-network is a multi-layer perceptron of length=104, which accepts all the float features from Z3, Z5, VHSE and BLOSUM62 feature engineering. The final sub-network accepts the tetramer patterns extracted using the feature engineering technique described in Yan et al (2021). The final network is a multi-layer perceptron with linear activation, which combines the latent representations from each sub-network and produces a regression output. The final hyperparameters (# layers, # nodes, activation functions, % dropout) are optimized using the Keras Tuner API.
 
-![alt text][docs/model.png]
+![alt text](docs/model.png)
 
